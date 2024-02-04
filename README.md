@@ -41,7 +41,7 @@ Click the button and the popup console will print the output of the compressor:
 
 ---
 
-Considerations:
+## Considerations:
 
 The output is a string of HTML elements which can be stored in an HTML file and opened in a browser.
 
@@ -54,3 +54,27 @@ Some of the output that was trimmed:
 - elements whose children consists of only one element (excluding text nodes)
 
 The output only renders the text nodes (wrapped in {{handlebars}} to indicate text) and leaves out everything else except each text node's immediate parent, unless the element has more than one child node.
+
+---
+
+## Some example outputs:
+
+The Github Profile Page
+
+![image](https://github.com/peterwangsc/dompressor/blob/master/example/comparison-github-profile-page.png)
+
+https://github.com/peterwangsc/dompressor/blob/master/example/example_output-github-profile-page.html
+
+A Wikipedia Article
+
+![image](https://github.com/peterwangsc/dompressor/blob/master/example/comparison-wikipedia-article.png)
+
+https://github.com/peterwangsc/dompressor/blob/master/example/example_output-wikipedia-article.html
+
+A Google Search
+
+![image](https://github.com/peterwangsc/dompressor/blob/master/example/comparison-google-search.png)
+
+https://github.com/peterwangsc/dompressor/blob/master/example/example_output-google-search.html
+
+---
