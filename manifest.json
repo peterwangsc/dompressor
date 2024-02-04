@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Dompressor",
+  "description": "Compresses the DOM for LLM ingestion",
+  "version": "0.1",
+  "action": {
+    "default_icon": "icon.png",
+    "default_title": "Dompressor",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab", "scripting", "storage", "unlimitedStorage"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
