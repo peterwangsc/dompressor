@@ -1,4 +1,5 @@
 # Dompressor Chrome Extension
+
 ## A lightweight DOM compressor
 
 Installation:
@@ -78,3 +79,21 @@ A Google Search
 https://github.com/peterwangsc/dompressor/blob/master/example/example_output-google-search.html
 
 ---
+
+## Images and Iframes
+
+Some additional things to consider are that some elements are included inside of iframes, which have their own DOM.
+
+In order to include the content of those iframes in the output, another loop was added to generate more HTML strings for every iframe.
+
+Some iframes do not allow that because of CORS, so they will be left out of the output. Only iframes that are hosted on the same domain are included.
+
+It actually took me a while to find a website with an iframe on it, but I finally stumbled upon LinkedIn which uses an iframe, as well as some other third party iframes.
+
+![image](https://github.com/peterwangsc/dompressor/blob/master/example/images-and-iframes.png)
+
+The images array of URLs is also added, to give the LLM a list of URLs to the visible images on the page. LLMs that have multimodality can use these URLs to load the image as an embedding.
+
+The images array is sourced by first grabbing the images on the page, then searching the page for elements with background-image set to a URL.
+
+The output from these two augmentations is as expected. The iframes produce their own HTML string, and the images get scraped from the DOM's image elements as well as the elements with a background-image set to a URL.

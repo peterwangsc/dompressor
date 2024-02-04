@@ -74,6 +74,49 @@ function jsonToHtml(json) {
   return html;
 }
 
+function searchImages(doc) {
+  return Array.from(doc.images)
+    .map((img) => img.src)
+    .concat(searchBackgroundImages(doc));
+}
+
+function searchBackgroundImages(doc) {
+  const srcChecker = /url\(\s*?['"]?\s*?(\S+?)\s*?["']?\s*?\)/i;
+  return Array.from(
+    Array.from(doc.querySelectorAll("*")).reduce((collection, node) => {
+      let prop = window
+        .getComputedStyle(node, null)
+        .getPropertyValue("background-image");
+      let match = srcChecker.exec(prop);
+      if (match) {
+        collection.add(match[1]);
+      }
+      return collection;
+    }, new Set())
+  );
+}
+
+function searchIFrames(doc) {
+  let iframeList = [];
+  doc.querySelectorAll("iframe").forEach((iframe) => {
+    try {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      iframeList.push({
+        message: jsonToHtml(removeIrrelevant(domToJson(iframeDoc))),
+        // images: searchImages(iframeDoc),
+        // iframes: searchIFrames(iframeDoc), is left out because... keep it simple
+        // no one uses iframes anymore anyways, now that i'm searching for them,
+        // it took me a while to find any on the web
+      });
+      console.log("pushed iframe");
+    } catch (e) {
+      // no-op
+      console.log("errored iframe", e);
+    }
+  });
+  return iframeList;
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("content.js received message");
   console.log(request);
@@ -81,6 +124,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "compress-dom") {
     sendResponse({
       message: jsonToHtml(removeIrrelevant(domToJson(document.body))),
+      images: searchImages(document),
+      iframes: searchIFrames(document),
     });
   }
 });
