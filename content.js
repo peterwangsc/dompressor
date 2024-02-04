@@ -101,13 +101,7 @@ function searchIFrames(doc) {
   doc.querySelectorAll("iframe").forEach((iframe) => {
     try {
       const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      iframeList.push({
-        message: jsonToHtml(removeIrrelevant(domToJson(iframeDoc))),
-        // images: searchImages(iframeDoc),
-        // iframes: searchIFrames(iframeDoc), is left out because... keep it simple
-        // no one uses iframes anymore anyways, now that i'm searching for them,
-        // it took me a while to find any on the web
-      });
+      iframeList.push(jsonToHtml(removeIrrelevant(domToJson(iframeDoc))));
       console.log("pushed iframe");
     } catch (e) {
       // no-op
